@@ -8,7 +8,9 @@ I owe a lot of my passion for music and my broad taste in genres to attending Co
 Even with this diversity, every year there are critics of the released Coachella lineup, as seen through the Reddit lineup announcement comments:
 
 *Yea….this isn’t the festival I went to in 2010😔* -bigbrett666
+\n
 *Awesome if you like pop and edm but sucks if you like live music.* -dpcpv75
+\n
 *This Coachella lineup is MID. No catering to the hip hop and rap fans. SMH debating selling my box* -kmart2588
 
 Some people say too much electronic, some say too little. Some say the artists are too new and unrecognizable, some complain about too many throwback artists and want more relevance.
