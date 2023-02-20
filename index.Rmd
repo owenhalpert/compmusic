@@ -5,55 +5,43 @@ date: "2023-02-14"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+## Homework Week 7
 
-## R Markdown
+Initial visualizations of the Coachella 2023 and 2022 playlists!
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-library(tidyverse)
+```{r setup, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 library(spotifyr)
-library("ggplot2")
-install.packages("ggthemes")                     # Install ggthemes package
-library("ggthemes")
-
+library(ggplot2)
+library(ggthemes)
+library(tidyverse)
 coachella2023 <- get_playlist_audio_features("", "2HfbF1Xx4RHhJI8jNvQAQb")
-
-coachella20232 <- coachella2023 %>%                    # Start with awards.
-  mutate(
-    mode = ifelse(mode == 0, "Minor", "Major")
-  )
-
-ggplot(coachella20232, aes(x = valence, y = energy, size = danceability, color = mode)) +
-  geom_point(position = "jitter", alpha = 0.4) +
-  labs(x = "Valence", y = "Energy", color = "Mode", size = "Danceability", title = "Coachella 2023") +
-  theme_fivethirtyeight()
-
 coachella2022 <- get_playlist_audio_features("", "2tcwxeUSNT7gYMzidaf5W1")
+```
 
-coachella20222 <- coachella2022 %>%                    # Start with awards.
+```{r mutate, echo=FALSE}
+coachella20232 <- coachella2023 %>%               
   mutate(
     mode = ifelse(mode == 0, "Minor", "Major")
   )
+coachella20222 <- coachella2022 %>%               
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  )
+```
 
+
+```{r graph1, echo=FALSE}
 ggplot(coachella20222, aes(x = valence, y = energy, size = danceability, color = mode)) +
   geom_point(position = "jitter", alpha = 0.4) +
   labs(x = "Valence", y = "Energy", color = "Mode", size = "Danceability", title = "Coachella 2022") +
   theme_fivethirtyeight()
-
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r graph2, echo=FALSE}
+ggplot(coachella20232, aes(x = valence, y = energy, size = danceability, color = mode)) +
+  geom_point(position = "jitter", alpha = 0.4) +
+  labs(x = "Valence", y = "Energy", color = "Mode", size = "Danceability", title = "Coachella 2023") +
+  theme_fivethirtyeight()
+```
+
+
