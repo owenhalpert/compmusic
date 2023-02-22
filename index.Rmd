@@ -1,11 +1,13 @@
 ---
 title: "Coachella Over The Years"
 author: "Owen Halpert"
-date: "2023-02-14"
+#date: "2023-02-14"
 output: 
   flexdashboard::flex_dashboard:
     storyboard: true
-    theme: cerulean
+    theme: lumen
+    orientation: rows
+    css: custom.css
 ---
 
 # Introduction
@@ -35,7 +37,7 @@ The Spotify tracks I will use to analyze this progression will be the yearly lin
 Looking at the [2023 lineup playlist](https://open.spotify.com/playlist/1RIp2yQ4yyNuFHqP80pCpz?si=72420310551b45aa), an extremely atypical track is He by Jai Paul. Paul was added to the lineup as an artist with a cult following who is extremely secretive and has maybe never even performed live. He is as elusive, if not more, than headliner Frank Ocean. Conversely, we see Obsessed by Calvin Harris, which we can say is much more typical, given that Harris has performed at Coachella 8 times and is one of the most mainstream EDM artists.
 
 
-# Homework Week 7 — Plotting Exercise #1
+# Visualisation
 
 ### Intro
 The below charts visualize the valence, energy, danceability and mode of the Coachella lineup for both 2022 and 2023. I find it interesting to compare how these attributes change from year to year. In a later, more refined version of these visualizations, I will make it easier for the viewer to see differences between the years. This may mean putting both years on one graph, or doing some sort of heatmap instead of a scatter plot so that the number of points isn't as jarring. 
@@ -63,7 +65,10 @@ coachella20222 <- coachella2022 %>%
   )
 ```
 
+Row {.tabset .tabset-fade}
+-------------------------------------
 
+### 2022
 ```{r graph1, echo=FALSE}
 plot1 <- ggplot(coachella20222, aes(x = valence, y = energy, size = danceability, color = mode)) +
   geom_point(position = "jitter", alpha = 0.4) +
@@ -73,7 +78,8 @@ plot1 <- ggplot(coachella20222, aes(x = valence, y = energy, size = danceability
 ggplotly(plot1)
 ```
 
-```{r graph2, echo=FALSE}
+### 2023
+```{r graph2}
 plot2 <- ggplot(coachella20232, aes(x = valence, y = energy, size = danceability, color = mode)) +
   geom_point(position = "jitter", alpha = 0.4) +
   labs(x = "Valence", y = "Energy", color = "Mode", size = "Danceability", title = "Coachella 2023") +
@@ -82,4 +88,6 @@ plot2 <- ggplot(coachella20232, aes(x = valence, y = energy, size = danceability
 ggplotly(plot2)
 ```
 
+# Discussion
 
+Nothing yet
