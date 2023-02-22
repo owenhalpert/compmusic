@@ -70,7 +70,11 @@ Row {.tabset .tabset-fade}
 
 ### 2022
 ```{r graph1, echo=FALSE}
-plot1 <- ggplot(coachella20222, aes(x = valence, y = energy, size = danceability, color = mode)) +
+plot1 <- ggplot(coachella20222, 
+                aes(x = valence,
+                    y = energy,
+                    size = danceability,
+                    color = mode)) +
   geom_point(position = "jitter", alpha = 0.4) +
   labs(x = "Valence", y = "Energy", color = "Mode", size = "Danceability", title = "Coachella 2022") +
   theme_fivethirtyeight()
