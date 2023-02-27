@@ -37,9 +37,8 @@ The Spotify tracks I will use to analyze this progression will be the yearly lin
 Looking at the [2023 lineup playlist](https://open.spotify.com/playlist/1RIp2yQ4yyNuFHqP80pCpz?si=72420310551b45aa), an extremely atypical track is He by Jai Paul. Paul was added to the lineup as an artist with a cult following who is extremely secretive and has maybe never even performed live. He is as elusive, if not more, than headliner Frank Ocean. Conversely, we see Obsessed by Calvin Harris, which we can say is much more typical, given that Harris has performed at Coachella 8 times and is one of the most mainstream EDM artists.
 
 
-# Visualisation
+# 2022 vs. 2023
 
-### Intro
 The below charts visualize the valence, energy, danceability and mode of the Coachella lineup for both 2022 and 2023. I find it interesting to compare how these attributes change from year to year. In a later, more refined version of these visualizations, I will make it easier for the viewer to see differences between the years. This may mean putting both years on one graph, or doing some sort of heatmap instead of a scatter plot so that the number of points isn't as jarring. 
 
 Initial visualizations of the Coachella 2023 and 2022 playlists!
@@ -50,6 +49,7 @@ library(ggplot2)
 library(ggthemes)
 library(tidyverse)
 library(plotly)
+library(compmus)
 coachella2023 <- get_playlist_audio_features("", "2HfbF1Xx4RHhJI8jNvQAQb")
 coachella2022 <- get_playlist_audio_features("", "2tcwxeUSNT7gYMzidaf5W1")
 ```
@@ -77,7 +77,7 @@ plot1 <- ggplot(coachella20222,
                     color = mode)) +
   geom_point(position = "jitter", alpha = 0.4) +
   labs(x = "Valence", y = "Energy", color = "Mode", size = "Danceability", title = "Coachella 2022") +
-  theme_fivethirtyeight()
+  theme_minimal()
 
 ggplotly(plot1)
 ```
@@ -87,9 +87,98 @@ ggplotly(plot1)
 plot2 <- ggplot(coachella20232, aes(x = valence, y = energy, size = danceability, color = mode)) +
   geom_point(position = "jitter", alpha = 0.4) +
   labs(x = "Valence", y = "Energy", color = "Mode", size = "Danceability", title = "Coachella 2023") +
-  theme_fivethirtyeight()
+  theme_minimal()
 
 ggplotly(plot2)
+```
+
+# Beyoncé 2019
+
+An important part of Coachella history (and history in general) is Beyoncé's "Homecoming" live album, which is her headline performance from Coachella 2019. This epic show was almost two hours long, and had the production quality of a Super Bowl halftime show. A Netflix documentary was made to immortalize the performance, something that is extremely rare for Coachella artists. Below, we will look at chromagrams for one of the songs she performed, "Formation", and use dynamic time warping to observe how the life performance differs from the album version. **BUG: CAN'T GET GGPLOTLY TO WORK ON 3RD TAB, DYNAMIC TIME WARPING**
+
+
+Row {.tabset .tabset-fade}
+-------------------------------------
+
+### Live Chromagram
+
+```{r beyonce_live}
+beyonce_live <-
+  get_tidy_audio_analysis("6oHexA34fw1WfswjIEA1hd") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+live_graph <- beyonce_live |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "'Formation' Live, 2019") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+
+ggplotly(live_graph)
+```
+
+### Recording Chromagram
+
+```{r beyonce_recording}
+beyonce_recording <-
+  get_tidy_audio_analysis("6g0Orsxv6glTJCt4cHsRsQ") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+recording_graph <- beyonce_recording |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "'Formation' Recording, 2016") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+
+ggplotly(recording_graph)
+```
+
+### Dynamic Time Warping
+
+```{r yoncedtw}
+compmus_long_distance(
+  beyonce_live |> mutate(pitches = map(pitches, compmus_normalise, "manhattan")),
+  beyonce_recording |> mutate(pitches = map(pitches, compmus_normalise, "manhattan")),
+  feature = pitches,
+  method = "manhattan"
+) |>
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_equal() +
+  labs(x = "Live Recording", y = "Album Recording") +
+  theme_minimal() +
+  scale_fill_viridis_c(guide = NULL)
 ```
 
 # Discussion
