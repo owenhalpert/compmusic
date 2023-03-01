@@ -94,7 +94,7 @@ ggplotly(plot2)
 
 # Beyoncé 2019
 
-An important part of Coachella history (and history in general) is Beyoncé's "Homecoming" live album, which is her headline performance from Coachella 2019. This epic show was almost two hours long, and had the production quality of a Super Bowl halftime show. A Netflix documentary was made to immortalize the performance, something that is extremely rare for Coachella artists. Below, we will look at chromagrams for one of the songs she performed, "Formation", and use dynamic time warping to observe how the life performance differs from the album version. **BUG: CAN'T GET GGPLOTLY TO WORK ON 3RD TAB, DYNAMIC TIME WARPING**
+An important part of Coachella history (and history in general) is Beyoncé's "Homecoming" live album, which is her headline performance from Coachella 2019. This epic show was almost two hours long, and had the production quality of a Super Bowl halftime show. A Netflix documentary was made to immortalize the performance, something that is extremely rare for Coachella artists. Below, we will look at chromagrams for one of the songs she performed, "Formation", and use dynamic time warping to observe how the life performance differs from the album version. Unfortunately, the DTW is too large of a computation to render in ggplotly, so an image is included in its place.
 
 
 Row {.tabset .tabset-fade}
