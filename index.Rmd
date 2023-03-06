@@ -10,6 +10,220 @@ output:
     css: custom.css
 ---
 
+```{r setup, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+library(spotifyr)
+library(ggplot2)
+library(ggthemes)
+library(tidyverse)
+library(plotly)
+library(compmus)
+coachella2023 <- get_playlist_audio_features("", "2HfbF1Xx4RHhJI8jNvQAQb")
+coachella2022 <- get_playlist_audio_features("", "2tcwxeUSNT7gYMzidaf5W1")
+```
+
+# Week 9 Chroma/Timbre
+
+For this week's homework we add a chroma and timbre analysis of songs by two of the three 2023 headliners to see how they may differ. Here is an analysis of "Futura Free" by Frank Ocean, and "Butter" by BTS
+
+In the cepstrograms, we can see how Butter by BTS is split into about 5 sections. The intro has some different elements than the rest of the song, and we can discover upon listening that the intro is the one part in the song that has very little instrumental, mainly just voice and drums. Once the instrumental comes in, the first few MFCC's become more present.
+
+In the cepstrogram of Futura Free by Frank Ocean, there is a lot going on, but maybe most interesting is around 280-315 seconds, when almost all the MFCC's are below 0.5 except C02. Upon listening, this is around 2:38 when the instrumental swells up, there is distorted noise, then we hear a focus on Frank's voice over very light, sparse piano chords. The section from 315 onwards is an audio collage of different interviews and mainly speaking.
+
+Now onto the self-similarity matrices. The purpose of comparing these two headliners is to show that the headliners encompass a range of genres. BTS is more standard pop music, with most of their music sounding formulaic in the genre of pop. Frank Ocean is more experimental and complex in his instrumentals. Using a self-similarity matrix is a great way to compare these overall complexities. 
+
+For BTS, we see a distinct checkerboard pattern. Here, we can use that to say there is a lot of homogeneity in the song. There are blocks in the song to represent different sections, but overall there is a lot of similarity between early and late sections in the song, chroma-wise. In the timbre section, the brighter crosses represent novelty, or something new in the song. We don't see much of this, and the timbral analysis shows that most of the song has fairly similar instrumentation, apart from the initial 25 or so seconds.
+
+For Frank Ocean, we see a lot more complexity. In this case, this is shown with a lot of dark blue and little yellow — the magnitude of similarity at many points in the song is low, meaning there are few repeated sections or little homogeneity in the track. The timbral analysis shows a similar insight, with a novel musical moment around 315 seconds (this is the aforementioned speaking collage). Listening is always important because while this may signal to us that there will be some crazy different instrumental section at this point, it is in fact more visible because it is only vocals, which happens only at this section. Instead of an "interesting" musical moment, you could describe this moment as an "uninteresting" moment among an otherwise interesting song timbre-wise, so it stands out in the self-similarity matrix.
+
+
+Row {.tabset .tabset-fade}
+-------------------------------------
+
+### BTS
+
+```{r btschroma, echo=FALSE}
+bts <-
+  get_tidy_audio_analysis("1mWdTewIgB3gtBM3TOSFhB?si=bf0f2f60b6604097") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+          compmus_summarise, pitches,
+          method = "mean", norm = "manhattan"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+          compmus_summarise, timbre,
+          method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
+
+btscepstro <- bts |>
+  compmus_gather_timbre() |>
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = basis,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Butter by BTS") +
+  scale_fill_viridis_c() +                              
+  theme_classic()
+
+ggplotly(btscepstro)
+```
+
+### Frank Ocean
+
+```{r frankcepstro}
+frank <-
+  get_tidy_audio_analysis("5k8LB57xOq8UUNVaKWSqrf?si=55dd0703aa284181") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+          compmus_summarise, pitches,
+          method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+          compmus_summarise, timbre,
+          method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
+
+frankcepstro <- frank |>
+  compmus_gather_timbre() |>
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = basis,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Futura Free by Frank Ocean") +
+  scale_fill_viridis_c() +                              
+  theme_classic()
+
+ggplotly(frankcepstro)
+```
+
+Row {.tabset .tabset-fade}
+-------------------------------------
+
+### BTS
+
+```{r, echo=FALSE, fig.width = 14}
+bts_ssm <-
+  get_tidy_audio_analysis("1mWdTewIgB3gtBM3TOSFhB?si=675dfcb040174a12") |>
+  compmus_align(bars, segments) |>
+  select(bars) |>
+  unnest(bars) |>
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "acentre", norm = "manhattan"
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+        compmus_summarise, timbre,
+        method = "mean"
+      )
+  )
+bts_ssm <- bind_rows(
+  bts_ssm |>
+    compmus_self_similarity(pitches, "aitchison") |>
+    mutate(d = d / max(d), type = "Chroma"),
+  bts_ssm |>
+    compmus_self_similarity(timbre, "euclidean") |>
+    mutate(d = d / max(d), type = "Timbre")
+) |>
+  mutate() |>
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  facet_wrap(~type) +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "")
+
+ggplotly(bts_ssm)
+```
+
+### Frank Ocean
+
+```{r, echo=FALSE, fig.width = 14}
+frank_ssm <-
+  get_tidy_audio_analysis("5k8LB57xOq8UUNVaKWSqrf?si=b9097b1e2bc94fc5") |>
+  compmus_align(bars, segments) |>
+  select(bars) |>
+  unnest(bars) |>
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "rms", norm = "euclidean"
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+        compmus_summarise, timbre,
+        method = "mean"
+      )
+  )
+frank_ssm <- bind_rows(
+  frank_ssm |>
+    compmus_self_similarity(pitches, "aitchison") |>
+    mutate(d = d / max(d), type = "Chroma"),
+  frank_ssm |>
+    compmus_self_similarity(timbre, "euclidean") |>
+    mutate(d = d / max(d), type = "Timbre")
+) |>
+  mutate() |>
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  facet_wrap(~type) +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "")
+
+ggplotly(frank_ssm)
+```
+
 # Introduction
 
 ###### An online portfolio for Computational Musicology at the University of Amsterdam (Spring 2023) by Owen Halpert
@@ -42,17 +256,6 @@ Looking at the [2023 lineup playlist](https://open.spotify.com/playlist/1RIp2yQ4
 The below charts visualize the valence, energy, danceability and mode of the Coachella lineup for both 2022 and 2023. I find it interesting to compare how these attributes change from year to year. In a later, more refined version of these visualizations, I will make it easier for the viewer to see differences between the years. This may mean putting both years on one graph, or doing some sort of heatmap instead of a scatter plot so that the number of points isn't as jarring. 
 
 Initial visualizations of the Coachella 2023 and 2022 playlists!
-
-```{r setup, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
-library(spotifyr)
-library(ggplot2)
-library(ggthemes)
-library(tidyverse)
-library(plotly)
-library(compmus)
-coachella2023 <- get_playlist_audio_features("", "2HfbF1Xx4RHhJI8jNvQAQb")
-coachella2022 <- get_playlist_audio_features("", "2tcwxeUSNT7gYMzidaf5W1")
-```
 
 ```{r mutate, echo=FALSE}
 coachella20232 <- coachella2023 %>%               
