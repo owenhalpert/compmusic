@@ -1,5 +1,5 @@
 ---
-title: "Coachella Over The Years"
+title: "🌴 Coachella Over The Years"
 author: "Owen Halpert"
 #date: "2023-02-14"
 output: 
@@ -29,15 +29,17 @@ In the cepstrograms, we can see how Butter by BTS is split into about 5 sections
 
 In the cepstrogram of Futura Free by Frank Ocean, there is a lot going on, but maybe most interesting is around 280-315 seconds, when almost all the MFCC's are below 0.5 except C02. Upon listening, this is around 2:38 when the instrumental swells up, there is distorted noise, then we hear a focus on Frank's voice over very light, sparse piano chords. The section from 315 onwards is an audio collage of different interviews and mainly speaking.
 
-Now onto the self-similarity matrices. The purpose of comparing these two headliners is to show that the headliners encompass a range of genres. BTS is more standard pop music, with most of their music sounding formulaic in the genre of pop. Frank Ocean is more experimental and complex in his instrumentals. Using a self-similarity matrix is a great way to compare these overall complexities. 
+Now onto the self-similarity matrices. The purpose of comparing these two headliners is to show that the headliners encompass a range of genres. BTS is more standard pop music, with most of their music sounding formulaic in the genre of pop. Frank Ocean is more experimental and complex in his instrumentals. Using a self-similarity matrix is a great way to compare these overall complexities.
 
 For BTS, we see a distinct checkerboard pattern. Here, we can use that to say there is a lot of homogeneity in the song. There are blocks in the song to represent different sections, but overall there is a lot of similarity between early and late sections in the song, chroma-wise. In the timbre section, the brighter crosses represent novelty, or something new in the song. We don't see much of this, and the timbral analysis shows that most of the song has fairly similar instrumentation, apart from the initial 25 or so seconds.
 
-For Frank Ocean, we see a lot more complexity. In this case, this is shown with a lot of dark blue and little yellow — the magnitude of similarity at many points in the song is low, meaning there are few repeated sections or little homogeneity in the track. The timbral analysis shows a similar insight, with a novel musical moment around 315 seconds (this is the aforementioned speaking collage). Listening is always important because while this may signal to us that there will be some crazy different instrumental section at this point, it is in fact more visible because it is only vocals, which happens only at this section. Instead of an "interesting" musical moment, you could describe this moment as an "uninteresting" moment among an otherwise interesting song timbre-wise, so it stands out in the self-similarity matrix.
+For Frank Ocean, we see a lot more complexity. In this case, this is shown with a lot of dark blue and little yellow --- the magnitude of similarity at many points in the song is low, meaning there are few repeated sections or little homogeneity in the track. The timbral analysis shows a similar insight, with a novel musical moment around 315 seconds (this is the aforementioned speaking collage). Listening is always important because while this may signal to us that there will be some crazy different instrumental section at this point, it is in fact more visible because it is only vocals, which happens only at this section. Instead of an "interesting" musical moment, you could describe this moment as an "uninteresting" moment among an otherwise interesting song timbre-wise, so it stands out in the self-similarity matrix.
 
+The graphs may be found on the following tab, "Cepstrograms and SSMs"
 
-Row {.tabset .tabset-fade}
--------------------------------------
+# Cepstrograms and SSMs
+
+## Row {.tabset .tabset-fade}
 
 ### BTS
 
@@ -121,8 +123,7 @@ frankcepstro <- frank |>
 ggplotly(frankcepstro)
 ```
 
-Row {.tabset .tabset-fade}
--------------------------------------
+## Row {.tabset .tabset-fade}
 
 ### BTS
 
@@ -226,15 +227,15 @@ ggplotly(frank_ssm)
 
 # Introduction
 
-###### An online portfolio for Computational Musicology at the University of Amsterdam (Spring 2023) by Owen Halpert
+#### An online portfolio for Computational Musicology at the University of Amsterdam (Spring 2023) by Owen Halpert
 
-I grew up with Coachella — as a child I was surrounded by its influence in the West Los Angeles region, in high school I was lucky enough to attend all four years, and in college I road tripped with my fellow students for the 2022 lineup.
+I grew up with Coachella --- as a child I was surrounded by its influence in the West Los Angeles region, in high school I was lucky enough to attend all four years, and in college I road tripped with my fellow students for the 2022 lineup.
 
 I owe a lot of my passion for music and my broad taste in genres to attending Coachella. With an extremely diverse lineup, attendees can walk from one stage to the next and instantly be transported between wildly different musical experiences.
 
 Even with this diversity, every year there are critics of the released Coachella lineup, as seen through the Reddit lineup announcement comments:
 
-> Yea….this isn’t the festival I went to in 2010😔 -bigbrett666
+> Yea....this isn't the festival I went to in 2010😔 -bigbrett666
 
 > Awesome if you like pop and edm but sucks if you like live music. -dpcpv75
 
@@ -244,16 +245,15 @@ Some people say too much electronic, some say too little. Some say the artists a
 
 While there is always some validity in each of these criticisms, for my project I'd like to further analyze the changing trends of Coachella artist selection. In doing so, I will analyze the growth or decline of major genres at Coachella, the regional distribution of artists, the age of artists and proximity to their "golden years", and the overall popularity of the booked names.
 
-I expect a trend toward more electronic music, more hip hop, and more obscure artists on the lineup in the recent years. 
+I expect a trend toward more electronic music, more hip hop, and more obscure artists on the lineup in the recent years.
 
 The Spotify tracks I will use to analyze this progression will be the yearly lineup playlists. I can then analyze and compare years as a whole. Shortcomings with this methodology might be that the selected tracks for each artist may not be representative of their true genre, that the playlists may not always be fully inclusive of all artists on the lineup, or that Goldenvoice has not released playlists for certain years, in which case I would have to use fan-made playlists. In this case, I would consider creating playlists on my own using the lineups and perhaps an automated Python script.
 
 Looking at the [2023 lineup playlist](https://open.spotify.com/playlist/1RIp2yQ4yyNuFHqP80pCpz?si=72420310551b45aa), an extremely atypical track is He by Jai Paul. Paul was added to the lineup as an artist with a cult following who is extremely secretive and has maybe never even performed live. He is as elusive, if not more, than headliner Frank Ocean. Conversely, we see Obsessed by Calvin Harris, which we can say is much more typical, given that Harris has performed at Coachella 8 times and is one of the most mainstream EDM artists.
 
-
 # 2022 vs. 2023
 
-The below charts visualize the valence, energy, danceability and mode of the Coachella lineup for both 2022 and 2023. I find it interesting to compare how these attributes change from year to year. In a later, more refined version of these visualizations, I will make it easier for the viewer to see differences between the years. This may mean putting both years on one graph, or doing some sort of heatmap instead of a scatter plot so that the number of points isn't as jarring. 
+The below charts visualize the valence, energy, danceability and mode of the Coachella lineup for both 2022 and 2023. I find it interesting to compare how these attributes change from year to year. In a later, more refined version of these visualizations, I will make it easier for the viewer to see differences between the years. This may mean putting both years on one graph, or doing some sort of heatmap instead of a scatter plot so that the number of points isn't as jarring.
 
 Initial visualizations of the Coachella 2023 and 2022 playlists!
 
@@ -268,10 +268,10 @@ coachella20222 <- coachella2022 %>%
   )
 ```
 
-Row {.tabset .tabset-fade}
--------------------------------------
+## Row {.tabset .tabset-fade}
 
 ### 2022
+
 ```{r graph1, echo=FALSE}
 plot1 <- ggplot(coachella20222, 
                 aes(x = valence,
@@ -286,22 +286,25 @@ ggplotly(plot1)
 ```
 
 ### 2023
+
 ```{r graph2}
 plot2 <- ggplot(coachella20232, aes(x = valence, y = energy, size = danceability, color = mode)) +
   geom_point(position = "jitter", alpha = 0.4) +
   labs(x = "Valence", y = "Energy", color = "Mode", size = "Danceability", title = "Coachella 2023") +
   theme_minimal()
-
+  
 ggplotly(plot2)
 ```
+
+### Spotify playlists for each year
+
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2tcwxeUSNT7gYMzidaf5W1?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></iframe>
 
 # Beyoncé 2019
 
 An important part of Coachella history (and history in general) is Beyoncé's "Homecoming" live album, which is her headline performance from Coachella 2019. This epic show was almost two hours long, and had the production quality of a Super Bowl halftime show. A Netflix documentary was made to immortalize the performance, something that is extremely rare for Coachella artists. Below, we will look at chromagrams for one of the songs she performed, "Formation", and use dynamic time warping to observe how the life performance differs from the album version. Unfortunately, the DTW is too large of a computation to render in ggplotly, so an image is included in its place.
 
-
-Row {.tabset .tabset-fade}
--------------------------------------
+## Row {.tabset .tabset-fade}
 
 ### Live Chromagram
 
