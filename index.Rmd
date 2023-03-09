@@ -21,6 +21,189 @@ coachella2023 <- get_playlist_audio_features("", "2HfbF1Xx4RHhJI8jNvQAQb")
 coachella2022 <- get_playlist_audio_features("", "2tcwxeUSNT7gYMzidaf5W1")
 ```
 
+# Chordograms and Keygrams
+
+Coachella is full of electronic music. Electronic music as a genre can range from highly melodic complex tonal music to very limited techno beats that may only really sound like drums and bass. I would like to analyze Opus by Eric Prydz, a 9 minute masterpiece with an abnormally long buildup, and see how the chordogram recognizes the tonal changes, if any. We see the song start out hovering around A major and F# minor, which is classified to be F# minor by [Chordify](https://chordify.net/). We then see something interesting --- at about 120 seconds, we see the tonal center start to become less pronounced. The clear F# minor is no longer so clear. This may be because the drums start coming in, which continue for the rest of the song. Drums can add a lot of harmonics that would throw off the pitch values. We can still see a center around that F#min block, but there is also activity in the Gb7, and the Eb7 regions. It should be noted that these values were computed using [David Temperley's key profiles](http://davidtemperley.com/wp-content/uploads/2015/11/temperley-mp99.pdf), a reconsideration of the classic Krumhansl-Schmuckler\
+Key-Finding Algorithm.
+
+## Row
+
+```{r}
+circshift <- function(v, n) {
+  if (n == 0) v else c(tail(v, n), head(v, -n))
+}
+
+#      C     C#    D     Eb    E     F     F#    G     Ab    A     Bb    B
+major_chord <-
+  c(   1,    0,    0,    0,    1,    0,    0,    1,    0,    0,    0,    0)
+minor_chord <-
+  c(   1,    0,    0,    1,    0,    0,    0,    1,    0,    0,    0,    0)
+seventh_chord <-
+  c(   1,    0,    0,    0,    1,    0,    0,    1,    0,    0,    1,    0)
+
+major_key <-
+  c(5.0, 2.0, 3.5, 2.0, 4.5, 4.0, 2.0, 4.5, 2.0, 3.5, 1.5, 4.0)
+minor_key <-
+  c(5.0, 2.0, 3.5, 4.5, 2.0, 4.0, 2.0, 4.5, 3.5, 2.0, 1.5, 4.0)
+
+chord_templates <-
+  tribble(
+    ~name, ~template,
+    "Gb:7", circshift(seventh_chord, 6),
+    "Gb:maj", circshift(major_chord, 6),
+    "Bb:min", circshift(minor_chord, 10),
+    "Db:maj", circshift(major_chord, 1),
+    "F:min", circshift(minor_chord, 5),
+    "Ab:7", circshift(seventh_chord, 8),
+    "Ab:maj", circshift(major_chord, 8),
+    "C:min", circshift(minor_chord, 0),
+    "Eb:7", circshift(seventh_chord, 3),
+    "Eb:maj", circshift(major_chord, 3),
+    "G:min", circshift(minor_chord, 7),
+    "Bb:7", circshift(seventh_chord, 10),
+    "Bb:maj", circshift(major_chord, 10),
+    "D:min", circshift(minor_chord, 2),
+    "F:7", circshift(seventh_chord, 5),
+    "F:maj", circshift(major_chord, 5),
+    "A:min", circshift(minor_chord, 9),
+    "C:7", circshift(seventh_chord, 0),
+    "C:maj", circshift(major_chord, 0),
+    "E:min", circshift(minor_chord, 4),
+    "G:7", circshift(seventh_chord, 7),
+    "G:maj", circshift(major_chord, 7),
+    "B:min", circshift(minor_chord, 11),
+    "D:7", circshift(seventh_chord, 2),
+    "D:maj", circshift(major_chord, 2),
+    "F#:min", circshift(minor_chord, 6),
+    "A:7", circshift(seventh_chord, 9),
+    "A:maj", circshift(major_chord, 9),
+    "C#:min", circshift(minor_chord, 1),
+    "E:7", circshift(seventh_chord, 4),
+    "E:maj", circshift(major_chord, 4),
+    "G#:min", circshift(minor_chord, 8),
+    "B:7", circshift(seventh_chord, 11),
+    "B:maj", circshift(major_chord, 11),
+    "D#:min", circshift(minor_chord, 3)
+  )
+
+key_templates <-
+  tribble(
+    ~name, ~template,
+    "Gb:maj", circshift(major_key, 6),
+    "Bb:min", circshift(minor_key, 10),
+    "Db:maj", circshift(major_key, 1),
+    "F:min", circshift(minor_key, 5),
+    "Ab:maj", circshift(major_key, 8),
+    "C:min", circshift(minor_key, 0),
+    "Eb:maj", circshift(major_key, 3),
+    "G:min", circshift(minor_key, 7),
+    "Bb:maj", circshift(major_key, 10),
+    "D:min", circshift(minor_key, 2),
+    "F:maj", circshift(major_key, 5),
+    "A:min", circshift(minor_key, 9),
+    "C:maj", circshift(major_key, 0),
+    "E:min", circshift(minor_key, 4),
+    "G:maj", circshift(major_key, 7),
+    "B:min", circshift(minor_key, 11),
+    "D:maj", circshift(major_key, 2),
+    "F#:min", circshift(minor_key, 6),
+    "A:maj", circshift(major_key, 9),
+    "C#:min", circshift(minor_key, 1),
+    "E:maj", circshift(major_key, 4),
+    "G#:min", circshift(minor_key, 8),
+    "B:maj", circshift(major_key, 11),
+    "D#:min", circshift(minor_key, 3)
+  )
+
+prydz <-
+  get_tidy_audio_analysis("3v2oAQomhOcYCPPHafS3KV?si=5728aa7d80bc4a4a") |>
+  compmus_align(sections, segments) |>
+  select(sections) |>
+  unnest(sections) |>
+  mutate(
+    pitches =
+      map(segments,
+          compmus_summarise, pitches,
+          method = "rms", norm = "euclidean"
+      )
+  )
+
+prydz_graph <- prydz |> 
+  compmus_match_pitch_template(
+    chord_templates,
+    method = "cosine",
+    norm = "euclidean"
+  ) |>
+  ggplot(
+    aes(x = start + duration / 2, width = duration, y = name, fill = d)
+  ) +
+  geom_tile() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_minimal() +
+  labs(x = "Time (s)", y = "")
+
+ggplotly(prydz_graph)
+```
+
+# Is Coachella getting more dancey?
+
+Over the past seven years, with the rise of EDM in pop culture and in Coachella's lineups, one may ask if the festival is becoming more dancey. What we see below is the average tempi and danceability scores (a Spotify quantification) from each year. This is no easy task computationally speaking, in fact, the graph below involves over 6,000 data points, around 1000 songs curated from each year's lineup by [Alex Rodriguez](https://open.spotify.com/user/aarod333?si=271917dd12624d62).
+
+We can see the average tempo mostly decreasing, and the average danceability mostly increasing. This is interesting, because normally you would assume these metrics go hand in hand. In reality, Spotify doesn't explicitly give their calculation methodology for Danceability. They simply say,
+
+"Danceability
+describes how suitable a track is for dancing based on a combination of
+musical elements including tempo, rhythm stability, beat strength, and
+overall regularity. A value of 0.0 is least danceable and 1.0 is most
+danceable."
+
+So, if Danceability were to increase with tempo decreasing, maybe there has been a rise in these other categories of rhythm stability, beat strength, and overall regularity. If you look at [this graphic](https://www.billboard.com/wp-content/uploads/media/history-of-coachella-acts-by-genre-2015-billboard-graphic-510.jpg) by Billboard, you can see a sharp increase in house/dance music and steady prevalence of electronic, which may explain the uptick in danceability.
+
+## Row
+
+```{r}
+sixteen <- 
+  get_playlist_audio_features("coachella2016", "04ULDSJpTbZRvIJ6C2UGGp")
+
+seventeen <- 
+  get_playlist_audio_features("coachella2017", "1I1aCzte1UlC9ntZRF3Bnk")
+
+eighteen <- 
+  get_playlist_audio_features("coachella2018", "68qkJBTzGvjqASInTr1J2r")
+
+nineteen <- 
+  get_playlist_audio_features("coachella2019", "5PDX3yPg2bjM74Qlo1Afdn")
+
+twentytwo <- 
+  get_playlist_audio_features("coachella2022", "2tcwxeUSNT7gYMzidaf5W1")
+
+twentythree <-
+  get_playlist_audio_features("coachella2023", "2HfbF1Xx4RHhJI8jNvQAQb")
+
+ssixteen <- sixteen %>%
+  summarize(avg_temp = mean(tempo), avg_danceability = mean(danceability))
+sseventeen <- seventeen %>%
+  summarize(avg_temp = mean(tempo), avg_danceability = mean(danceability))
+eeighteen <- eighteen %>%
+  summarize(avg_temp = mean(tempo), avg_danceability = mean(danceability))
+nnineteen <- nineteen %>%
+  summarize(avg_temp = mean(tempo), avg_danceability = mean(danceability))
+ttwentytwo <- twentytwo %>%
+  summarize(avg_temp = mean(tempo), avg_danceability = mean(danceability))
+ttwentythree <- twentythree %>%
+  summarize(avg_temp = mean(tempo), avg_danceability = mean(danceability))
+master <-
+  bind_rows("2016" = ssixteen, "2017" = sseventeen, "2018" = eeighteen, "2019" = nnineteen, "2022" = ttwentytwo,  "2023" = ttwentythree, .id = "Year")
+
+master_tempo <- ggplot(master, aes(x = Year, y = avg_temp, size = avg_danceability, label = avg_temp)) +
+  geom_point() +
+  ylim(120, 125) +
+  labs(y = "Average Tempo", size = "Average Danceability") +
+  theme_minimal()
+
+ggplotly(master_tempo)
+```
+
 # Week 9 Chroma/Timbre
 
 For this week's homework we add a chroma and timbre analysis of songs by two of the three 2023 headliners to see how they may differ. Here is an analysis of "Futura Free" by Frank Ocean, and "Butter" by BTS
@@ -298,7 +481,11 @@ ggplotly(plot2)
 
 ### Spotify playlists for each year
 
-<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2tcwxeUSNT7gYMzidaf5W1?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></iframe>
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2tcwxeUSNT7gYMzidaf5W1?utm_source=generator&amp;theme=0" width="100%" height="352" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+
+</iframe>
+
+</iframe>
 
 # Beyoncé 2019
 
