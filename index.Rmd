@@ -207,7 +207,7 @@ yoncedytw
 
 ------------------------------------------------------------------------
 
-Unfortunately, the DTW is too large of a computation to render in ggplotly, so an image is included in its place.
+Unfortunately, the DTW is too large of a computation to render in `ggplotly`, so an image is included in its place.
 
 Proper alignment in a DTW visualization will look like a diagonal line, which we can very, very faintly see at certain time windows in the graph. This means that at some points in the performance, it was very well matched up to the original recording, and vice versa. However, with the differences in timing between the two performances, it may be hard to accurately compare them.
 
