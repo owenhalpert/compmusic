@@ -22,7 +22,7 @@ coachella2023 <- readRDS(file = "data/coachella2023.RDS")
 coachella2022 <- readRDS(file = "data/coachella2022.RDS")
 ```
 
-# Clustering
+# Headliner Clustering
 
 ### Commentary {data-width="200"}
 
