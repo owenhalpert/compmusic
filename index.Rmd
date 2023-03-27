@@ -42,20 +42,19 @@ Some people say too much electronic, some say too little. Some say the artists a
 
 While there is always some validity in each of these criticisms, for my project I'd like to further analyze the trends of Coachella artist selection. To do so, I will use musicological metrics to show variance in genre, danceability over the years, and changing levels of emotional "valence" (A Spotify measure from 0.0 to 1.0 describing the "musical positiveness" conveyed by a track). I will look at artists' live performances at Coachella, analyze melodic aspects of different tracks, and more.
 
-The Spotify tracks I will use to analyze this progression will be yearly lineup playlists. I can then analyze and compare years as a whole. These playlists were assembled by user [Alex Rodriguez](https://open.spotify.com/user/aarod333), who explained that the playlists are made up of "Top 5 songs per artist, attempt to spread across their notable releases and shorter edits where possible."
+The Spotify tracks I will use to analyze this progression will be yearly lineup playlists. I can then analyze and compare years as a whole. These playlists were assembled by user [Alex Rodriguez](https://open.spotify.com/user/aarod333){target="_blank"}, who explained that the playlists are made up of "Top 5 songs per artist, attempt to spread across their notable releases and shorter edits where possible."
 
 Shortcomings with this methodology might be that the selected tracks for each artist may not be representative of their true genre, that the playlists may not always be fully inclusive of all artists on the lineup, or that they are simply so large that meaningful comparisons by some metrics will be difficult to make. Nonetheless, we can use these as a starting point to focus in on some trends within instead of trying to analyze the years as a whole.
 
-To give a sense of the breadth of these playlists, we can examine the outliers. Looking at the [2023 lineup playlist](https://open.spotify.com/playlist/2HfbF1Xx4RHhJI8jNvQAQb), an extremely atypical track is BTSTU by Jai Paul. Paul was added to the lineup as an artist with a cult following who is extremely secretive and has never performed live. He is as elusive, if not more, than headliner Frank Ocean. Conversely, we see One Kiss by Calvin Harris, which we can say is much more typical, given that Harris has performed at Coachella 8 times and is one of the most mainstream EDM artists.
+To give a sense of the breadth of these playlists, we can examine the outliers. Looking at the [2023 lineup playlist](https://open.spotify.com/playlist/2HfbF1Xx4RHhJI8jNvQAQb){target="_blank"}, an extremely atypical track is BTSTU by Jai Paul. Paul was added to the lineup as an artist with a cult following who is extremely secretive and has never performed live. He is as elusive, if not more, than headliner Frank Ocean. Conversely, we see One Kiss by Calvin Harris, which we can say is much more typical, given that Harris has performed at Coachella 8 times and is one of the most mainstream EDM artists.
 
-# Recent Year Overviews {data-orientation=columns}
+# Recent Year Overviews {data-orientation="columns"}
 
-Column {data-width="200"}
-------------------------------------- 
+## Column {data-width="200"}
 
 ### Commentary
 
-The below charts give a high-level broad overview of major audio features for tracks in the 2022 and 2023 playlists. Specifically, captured are the valence, energy, danceability (size of dots, mouse over for values) and mode. With the size of these datasets it is difficult to make broad comparisons, but some observations could be as follows:
+The below charts give a high-level broad overview of major audio features for tracks in the [2022](https://open.spotify.com/playlist/2tcwxeUSNT7gYMzidaf5W1){target="_blank"} and [2023](https://open.spotify.com/playlist/2HfbF1Xx4RHhJI8jNvQAQb){target="_blank"} playlists. Specifically, captured are the valence, energy, danceability (size of dots, mouse over for values) and mode. With the size of these datasets it is difficult to make broad comparisons, but some observations could be as follows:
 
 • While 2022 shows most of the high valence songs having a major key, 2023 is more of a mix, with some of the highest valence songs being in a minor key.
 
@@ -76,8 +75,7 @@ coachella20222 <- coachella2022 %>%
   )
 ```
 
-Column {.tabset data-width="800"}
-------------------------------------- 
+## Column {.tabset data-width="800"}
 
 ### 2022
 
@@ -110,13 +108,13 @@ ggplotly(plot2)
 
 ### Commentary {data-width="200"}
 
-Over the past seven years, with the rise of EDM in pop culture and in Coachella's lineups, one may ask if the festival is becoming more dancey. What we see below is the average tempi and danceability scores (a Spotify quantification) from each year. This is no easy task computationally speaking, in fact, the graph below involves over 6,000 data points, around 1000 songs curated from each year's lineup by [Alex Rodriguez](https://open.spotify.com/user/aarod333?si=271917dd12624d62).
+Over the past seven years, with the rise of EDM in pop culture and in Coachella's lineups, one may ask if the festival is becoming more dancey. What we see below is the average tempi and danceability scores (a Spotify quantification) from each year. This is no easy task computationally speaking, in fact, the graph below involves over 6,000 data points, around 1000 songs curated from each year's lineup by [Alex Rodriguez](https://open.spotify.com/user/aarod333?si=271917dd12624d62){target="_blank"}.
 
 We can see the average tempo mostly decreasing, and the average danceability mostly increasing. This is interesting, because normally you would assume these metrics go hand in hand. In reality, Spotify doesn't explicitly give their calculation methodology for Danceability. They simply say,
 
 "Danceability describes how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. A value of 0.0 is least danceable and 1.0 is most danceable."
 
-So, if Danceability were to increase with tempo decreasing, maybe there has been a rise in these other categories of rhythm stability, beat strength, and overall regularity. If you look at [this graphic](https://www.billboard.com/wp-content/uploads/media/history-of-coachella-acts-by-genre-2015-billboard-graphic-510.jpg) by Billboard, you can see a sharp increase in house/dance music and steady prevalence of electronic, which may explain the uptick in danceability.
+So, if Danceability were to increase with tempo decreasing, maybe there has been a rise in these other categories of rhythm stability, beat strength, and overall regularity. If you look at [this graphic](https://www.billboard.com/wp-content/uploads/media/history-of-coachella-acts-by-genre-2015-billboard-graphic-510.jpg){target="_blank"} by Billboard, you can see a sharp increase in house/dance music and steady prevalence of electronic, which may explain the uptick in danceability.
 
 ### Danceability {data-width="800"}
 
@@ -392,7 +390,7 @@ ggplotly(prydz_graph)
 
 ### Commentary {data-width="200"}
 
-Coachella is full of electronic music. Electronic music as a genre can range from highly melodic complex tonal music to very limited techno beats that may only really sound like drums and bass. I would like to analyze Opus by Eric Prydz, a 9 minute masterpiece with an abnormally long buildup, and see how the chordogram recognizes the tonal changes, if any. We see the song start out hovering around A major and F# minor, which is classified to be F# minor by [Chordify](https://chordify.net/). We then see something interesting --- at about 120 seconds, we see the tonal center start to become less pronounced. The clear F# minor is no longer so clear. This may be because the drums start coming in, which continue for the rest of the song. Drums can add a lot of harmonics that would throw off the pitch values. We can still see a center around that F#min block, but there is also activity in the Gb7, and the Eb7 regions. It should be noted that these values were computed using [David Temperley's key profiles](http://davidtemperley.com/wp-content/uploads/2015/11/temperley-mp99.pdf), a reconsideration of the classic Krumhansl-Schmuckler Key-Finding Algorithm.
+Coachella is full of electronic music. Electronic music as a genre can range from highly melodic complex tonal music to very limited techno beats that may only really sound like drums and bass. I would like to analyze Opus by Eric Prydz, a 9 minute masterpiece with an abnormally long buildup, and see how the chordogram recognizes the tonal changes, if any. We see the song start out hovering around A major and F# minor, which is classified to be F# minor by [Chordify](https://chordify.net/){target="_blank"}. We then see something interesting --- at about 120 seconds, we see the tonal center start to become less pronounced. The clear F# minor is no longer so clear. This may be because the drums start coming in, which continue for the rest of the song. Drums can add a lot of harmonics that would throw off the pitch values. We can still see a center around that F#min block, but there is also activity in the Gb7, and the Eb7 regions. It should be noted that these values were computed using [David Temperley's key profiles](http://davidtemperley.com/wp-content/uploads/2015/11/temperley-mp99.pdf){target="_blank"}, a reconsideration of the classic Krumhansl-Schmuckler Key-Finding Algorithm.
 
 # Discussion
 
