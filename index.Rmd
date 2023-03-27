@@ -28,8 +28,6 @@ coachella2022 <- readRDS(file = "data/coachella2022.RDS")
 
 note: I am trying to figure out how to replace the song names on the axis with the artist names. The table uses `track.name` and I tried to do a mutate like `track.name = track.artists['name']` but can't manage to figure out the syntax. If someone could help me go about this, that would be much appreciated
 
-<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/7uPCMiwKhG0SSHO9Ivx5FL?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-
 Coachella has had a wide array of headliners over the past six years, ranging over diverse genres such as KPOP, rap, psychedelic rock, classic rock, R&B, and more. While each of these headliners earned their spot by being a legend and paving their own way, we can still do some grouping amongst them. The dendrogram to the right is a visualization of a clustering technique applied to [a playlist I created](https://open.spotify.com/playlist/7uPCMiwKhG0SSHO9Ivx5FL?si=a7a9311545894655){target="_blank"} which simply contains each headliner for the past six years represented by their #1 song. Of course, this isn't the best method, since perhaps the artist's #1 song is not very representative of their style, but it should be good enough to get some general groupings.
 
 The clustering was calculated based on pitch and timbre features of the tracks, and the dendrogram was created using complete linkage. Looking on the lowest level, we can perhaps start to make out some subgenres and make sense of the clusters.
