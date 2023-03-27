@@ -461,15 +461,16 @@ headliners_juice <-
   ) |>
   step_center(all_predictors()) |>
   step_scale(all_predictors()) |> 
-  # step_range(all_predictors()) |> 
   prep(headliners |> mutate(track.name = str_trunc(track.name, 50))) |>
   juice() |>
   column_to_rownames("track.name")
 
+# Data is stored as standard Spotify table, with a nested table under the "track.artists" column and my target in that table's "name" column.
+
 headliners_dist <- dist(headliners_juice, method = "euclidean")
 
 headliners_dendro <- headliners_dist |> 
-  hclust(method = "complete") |> # Try single, average, and complete.
+  hclust(method = "complete") |>
   dendro_data() |>
   ggdendrogram(rotate = TRUE, size = 1) + 
   labs(title = "Headliners Dendrogram")
