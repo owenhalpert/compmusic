@@ -4,6 +4,10 @@ library(ggthemes)
 library(tidyverse)
 library(plotly)
 library(compmus)
+library(spotifyr)
+library(ggdendro)
+library(tidymodels)
+library(heatmaply)
 
 coachella2023 <- get_playlist_audio_features("", "2HfbF1Xx4RHhJI8jNvQAQb")
 saveRDS(object = coachella2023,file = "data/coachella2023.RDS")
@@ -467,15 +471,122 @@ headliners_juice <-
 
 # Data is stored as standard Spotify table, with a nested table under the "track.artists" column and my target in that table's "name" column.
 
+# Make table with song and artist name
+
+# Hacked solution, mixing base R and tidyverse...
+
+# Syntax for getting first element
+headliners$track.album.artists[[1]]$name
+
+# A very hacked solution that if I had time would find a better function for this
+
+n_headliners <- nrow(headliners)
+artists <- c()
+
+for (i in 1:n_headliners) {
+  artists[[i]] <- headliners$track.album.artists[[i]]$name
+}
+
+artist_df <- plyr::ldply(artists, rbind)
+
+# Can paste here if want to be fancy and have both artists
+
+track_name_table <- headliners %>%
+  select(track.name)
+
+# Change names
+c_table <- cbind(artist_df$`1`,track_name_table)
+colnames(c_table) <- c("artist","label")
+
+# Make Dendrogram
 headliners_dist <- dist(headliners_juice, method = "euclidean")
 
-headliners_dendro <- headliners_dist |> 
+library(ggdendro) # needed to call this to get it to work, can add above
+
+# Run distance metrics
+headliners_dendro_data <- headliners_dist |>
+  hclust(method = "complete") |>
+  dendro_data()
+
+# Make table that adds in artist name
+headliners_dendro_data$labels <- headliners_dendro_data$labels |>
+  left_join(c_table)
+
+# Call this part of the table name when manipulating geom_text()
+headliners_dendro <- headliners_dendro_data |>
+  ggdendrogram(rotate = TRUE, size = 1) +
+  geom_text(
+    data = label(headliners_dendro_data),
+    aes(x, y,
+        label = artist),
+    hjust = 0,
+    size = 3
+  ) +
+  scale_y_reverse(expand = c(0.2, 0)) +
+  labs(title = "Headliners Dendrogram")
+
+ggplotly(headliners_dendro)
+
+saveRDS(object = headliners_dendro,file = "data/headliners_dendro.RDS")
+
+headlinersbytrack <-
+  get_playlist_audio_features("headliners", "7uPCMiwKhG0SSHO9Ivx5FL") |>
+  add_audio_analysis() |>
+  mutate(
+    segments = map2(segments, key, compmus_c_transpose),
+    pitches =
+      map(segments,
+          compmus_summarise, pitches,
+          method = "mean", norm = "manhattan"
+      ),
+    timbre =
+      map(
+        segments,
+        compmus_summarise, timbre,
+        method = "mean"
+      )
+  ) |>
+  mutate(pitches = map(pitches, compmus_normalise, "clr")) |>
+  mutate_at(vars(pitches, timbre), map, bind_rows) |>
+  unnest(cols = c(pitches, timbre))
+
+headliners_juicebytrack <-
+  recipe(
+    track.name ~
+      danceability +
+      energy +
+      loudness +
+      speechiness +
+      acousticness +
+      instrumentalness +
+      liveness +
+      valence +
+      tempo +
+      duration +
+      C + `C#|Db` + D + `D#|Eb` +
+      E + `F` + `F#|Gb` + G +
+      `G#|Ab` + A + `A#|Bb` + B +
+      c01 + c02 + c03 + c04 + c05 + c06 +
+      c07 + c08 + c09 + c10 + c11 + c12,
+    data = headlinersbytrack
+  ) |>
+  step_center(all_predictors()) |>
+  step_scale(all_predictors()) |> 
+  prep(headlinersbytrack |> mutate(track.name = str_trunc(track.name, 50))) |>
+  juice() |>
+  column_to_rownames("track.name")
+
+# Data is stored as standard Spotify table, with a nested table under the "track.artists" column and my target in that table's "name" column.
+
+headliners_distbytrack <- dist(headliners_juicebytrack, method = "euclidean")
+
+headliners_dendrobytrack <- headliners_distbytrack |> 
   hclust(method = "complete") |>
   dendro_data() |>
   ggdendrogram(rotate = TRUE, size = 1) + 
-  labs(title = "Headliners Dendrogram")
+  labs(title = "Headliners Dendrogram with Track Name")
 
-saveRDS(object = headliners_dendro,file = "data/headliners_dendro.RDS")
+saveRDS(object = headliners_dendrobytrack,file = "data/headliners_dendrobytrack.RDS")
 
 
 
