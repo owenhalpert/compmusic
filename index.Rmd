@@ -8,6 +8,7 @@ output:
     orientation: rows
     theme: lumen
     css: custom.css
+    favicon: favicon.ico
 ---
 
 ```{r setup, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
