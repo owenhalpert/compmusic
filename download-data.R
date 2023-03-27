@@ -469,27 +469,18 @@ headliners_juice <-
   juice() |>
   column_to_rownames("track.name")
 
-# Data is stored as standard Spotify table, with a nested table under the "track.artists" column and my target in that table's "name" column.
-
-# Make table with song and artist name
-
-# Hacked solution, mixing base R and tidyverse...
-
 # Syntax for getting first element
 headliners$track.album.artists[[1]]$name
-
-# A very hacked solution that if I had time would find a better function for this
 
 n_headliners <- nrow(headliners)
 artists <- c()
 
+# Makes list of artists names in order
 for (i in 1:n_headliners) {
   artists[[i]] <- headliners$track.album.artists[[i]]$name
 }
 
 artist_df <- plyr::ldply(artists, rbind)
-
-# Can paste here if want to be fancy and have both artists
 
 track_name_table <- headliners %>%
   select(track.name)
@@ -500,8 +491,6 @@ colnames(c_table) <- c("artist","label")
 
 # Make Dendrogram
 headliners_dist <- dist(headliners_juice, method = "euclidean")
-
-library(ggdendro) # needed to call this to get it to work, can add above
 
 # Run distance metrics
 headliners_dendro_data <- headliners_dist |>
@@ -524,8 +513,6 @@ headliners_dendro <- headliners_dendro_data |>
   ) +
   scale_y_reverse(expand = c(0.2, 0)) +
   labs(title = "Headliners Dendrogram")
-
-ggplotly(headliners_dendro)
 
 saveRDS(object = headliners_dendro,file = "data/headliners_dendro.RDS")
 
@@ -575,8 +562,6 @@ headliners_juicebytrack <-
   prep(headlinersbytrack |> mutate(track.name = str_trunc(track.name, 50))) |>
   juice() |>
   column_to_rownames("track.name")
-
-# Data is stored as standard Spotify table, with a nested table under the "track.artists" column and my target in that table's "name" column.
 
 headliners_distbytrack <- dist(headliners_juicebytrack, method = "euclidean")
 
