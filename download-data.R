@@ -477,7 +477,7 @@ artists <- c()
 
 # Makes list of artists names in order
 for (i in 1:n_headliners) {
-  artists[[i]] <- headliners$track.album.artists[[i]]$name
+  artists[[i]] <- paste("                               ", headliners$track.album.artists[[i]]$name)
 }
 
 artist_df <- plyr::ldply(artists, rbind)
