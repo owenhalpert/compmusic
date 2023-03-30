@@ -24,11 +24,9 @@ coachella2022 <- readRDS(file = "data/coachella2022.RDS")
 
 # Introduction
 
-#### An online portfolio for Computational Musicology at the University of Amsterdam (Spring 2023) by Owen Halpert
+#### An exploration of the genres, artists, and specific audio features that make up one of the most popular music festivals in the world.
 
-I grew up with Coachella --- as a child I was surrounded by its influence in the Los Angeles region, in high school I was lucky enough to attend all four years, and in college I road tripped with my fellow students for the 2022 lineup.
-
-I owe a lot of my passion for music and my broad taste in genres to attending Coachella. With an extremely diverse lineup, attendees can walk from one stage to the next and instantly be transported between wildly different musical experiences.
+I owe a lot of my passion for music and my broad taste in genres to attending and following Coachella over the years. With an extremely diverse lineup, attendees can walk from one stage to the next and instantly be transported between wildly different musical experiences.
 
 Even with this diversity, every year there are critics of the released Coachella lineup, as seen through the Reddit lineup announcement comments:
 
@@ -48,11 +46,13 @@ Shortcomings with this methodology might be that the selected tracks for each ar
 
 To give a sense of the breadth of these playlists, we can examine the outliers. Looking at the [2023 lineup playlist](https://open.spotify.com/playlist/2HfbF1Xx4RHhJI8jNvQAQb){target="_blank"}, an extremely atypical track is BTSTU by Jai Paul. Paul was added to the lineup as an artist with a cult following who is extremely secretive and has never performed live. He is as elusive, if not more, than headliner Frank Ocean. Conversely, we see One Kiss by Calvin Harris, which we can say is much more typical, given that Harris has performed at Coachella 8 times and is one of the most mainstream EDM artists.
 
+While these playlists will serve as a guide, most of the actual analysis will be done on individual tracks or segments of these playlists rather than analyzing them as a whole.
+
 # Recent Year Overviews {data-orientation="columns"}
 
 ## Column {data-width="200"}
 
-### Commentary
+### **Commentary**
 
 The below charts give a high-level broad overview of major audio features for tracks in the [2022](https://open.spotify.com/playlist/2tcwxeUSNT7gYMzidaf5W1){target="_blank"} and [2023](https://open.spotify.com/playlist/2HfbF1Xx4RHhJI8jNvQAQb){target="_blank"} playlists. Specifically, captured are the valence, energy, danceability (size of dots, mouse over for values) and mode. With the size of these datasets it is difficult to make broad comparisons, but some observations could be as follows:
 
@@ -77,7 +77,7 @@ coachella20222 <- coachella2022 %>%
 
 ## Column {.tabset data-width="800"}
 
-### 2022
+### **2022**
 
 ```{r graph1, echo=FALSE}
 plot1 <- ggplot(coachella20222, 
@@ -93,7 +93,7 @@ plot1 <- ggplot(coachella20222,
 ggplotly(plot1)
 ```
 
-### 2023
+### **2023**
 
 ```{r graph2}
 plot2 <- ggplot(coachella20232, aes(x = valence, y = energy, size = danceability, color = mode)) +
@@ -106,7 +106,7 @@ ggplotly(plot2)
 
 # Deeper into Danceability
 
-### Commentary {data-width="200"}
+### **Commentary** {data-width="200"}
 
 Over the past seven years, with the rise of EDM in pop culture and in Coachella's lineups, one may ask if the festival is becoming more dancey. What we see below is the average tempi and danceability scores (a Spotify quantification) from each year. This is no easy task computationally speaking, in fact, the graph below involves over 6,000 data points, around 1000 songs curated from each year's lineup by [Alex Rodriguez](https://open.spotify.com/user/aarod333?si=271917dd12624d62){target="_blank"}.
 
@@ -116,7 +116,7 @@ We can see the average tempo mostly decreasing, and the average danceability mos
 
 So, if Danceability were to increase with tempo decreasing, maybe there has been a rise in these other categories of rhythm stability, beat strength, and overall regularity. If you look at [this graphic](https://www.billboard.com/wp-content/uploads/media/history-of-coachella-acts-by-genre-2015-billboard-graphic-510.jpg){target="_blank"} by Billboard, you can see a sharp increase in house/dance music and steady prevalence of electronic, which may explain the uptick in danceability.
 
-### Danceability {data-width="800"}
+### **Danceability** {data-width="800"}
 
 ```{r}
 sixteen <- 
@@ -194,7 +194,7 @@ ggplotly(recording_graph)
 
 ------------------------------------------------------------------------
 
-TODO: ADD ANALYSIS
+Here we see a chromagram, which, at any given time window in the music, tells us how much of each pitch we are hearing relative to the others. Looking at this chromagram, for example, we can see that for most of the song we are getting strong values from the F key. We can attribute that to the constant wobbly electronic tone. Interestingly, we see almost a full scale in the first 20-30 seconds. I'm not exactly sure why this happens --- there is a two note echoing sound playing and her voice a cappella. With the voice having such a broad range of harmonics, this may explain the multiple notes, but not the ascending scale. There are low drone notes that rise, but over shorter periods of time. The ascending here looks like a very clean, distinct scale.
 
 ### Dynamic Time Warping
 
@@ -209,7 +209,7 @@ yoncedytw
 
 Unfortunately, the DTW is too large of a computation to render in `ggplotly`, so an image is included in its place.
 
-Proper alignment in a DTW visualization will look like a diagonal line, which we can very, very faintly see at certain time windows in the graph. This means that at some points in the performance, it was very well matched up to the original recording, and vice versa. However, with the differences in timing between the two performances, it may be hard to accurately compare them.
+Proper alignment in a DTW visualization will look like a diagonal line, which we can very, very faintly see at certain time windows in the graph. This means that at some points in the performance, it was very well matched up to the original recording, and vice versa. However, with the differences in timing between the two performances, it may be hard to accurately compare them. The dynamic time warping at each point can be thought of as a cost function regarding how costly it would be to make some sort of edit to align the tracks perfectly --- a similar problem to the [edit distance problem.](https://en.wikipedia.org/wiki/Edit_distance){target="_blank"}. A dynamic programming approach is used in both sequence-aligning problems.
 
 # Frank vs. BTS {.storyboard}
 
@@ -243,7 +243,7 @@ cepstros
 
 ------------------------------------------------------------------------
 
-For this week's homework we add a chroma and timbre analysis of songs by two of the three 2023 headliners to see how they may differ. Here is an analysis of "Futura Free" by Frank Ocean, and "Butter" by BTS, through the lens of cepstrograms and self-similarity matrices.
+In order to further explore the range of Coachella's headliners, we may want to explore how their music differs. To analyze song structure, instrumentation, and more, we can conduct a chroma and timbre analysis of songs by two of the three 2023 headliners. Here is an analysis of "Futura Free" by Frank Ocean, and "Butter" by BTS, through the lens of cepstrograms and self-similarity matrices.
 
 Here in the cepstrograms, we can see how Butter by BTS is split into about 5 sections. The intro has some different elements than the rest of the song, and we can discover upon listening that the intro is the one part in the song that has very little instrumental, mainly just voice and drums. Once the instrumental comes in, the first few MFCC's become more present.
 
@@ -277,9 +277,9 @@ ggplotly(frank_ssm)
 
 For Frank Ocean, we see a lot more complexity. In this case, this is shown with a lot of dark blue and little yellow --- the magnitude of similarity at many points in the song is low, meaning there are few repeated sections or little homogeneity in the track. The timbral analysis shows a similar insight, with a novel musical moment around 315 seconds (this is the aforementioned speaking collage). Listening is always important because while this may signal to us that there will be some crazy different instrumental section at this point, it is in fact more visible because it is only vocals, which happens only at this section. Instead of an "interesting" musical moment, you could describe this moment as an "uninteresting" moment among an otherwise interesting song timbre-wise, so it stands out in the self-similarity matrix.
 
-# EDM and Melody
+# EDM, Melody, and Tempo {.storyboard}
 
-### Chordogram {data-width="800"}
+### Melody: A Chordogram
 
 ```{r, fig.width=5, fig.height=5}
 circshift <- function(v, n) {
@@ -388,19 +388,32 @@ prydz_graph <-
 ggplotly(prydz_graph)
 ```
 
-### Commentary {data-width="200"}
+------------------------------------------------------------------------
 
 Coachella is full of electronic music. Electronic music as a genre can range from highly melodic complex tonal music to very limited techno beats that may only really sound like drums and bass. I would like to analyze Opus by Eric Prydz, a 9 minute masterpiece with an abnormally long buildup, and see how the chordogram recognizes the tonal changes, if any. We see the song start out hovering around A major and F# minor, which is classified to be F# minor by [Chordify](https://chordify.net/){target="_blank"}. We then see something interesting --- at about 120 seconds, we see the tonal center start to become less pronounced. The clear F# minor is no longer so clear. This may be because the drums start coming in, which continue for the rest of the song. Drums can add a lot of harmonics that would throw off the pitch values. We can still see a center around that F#min block, but there is also activity in the Gb7, and the Eb7 regions. It should be noted that these values were computed using [David Temperley's key profiles](http://davidtemperley.com/wp-content/uploads/2015/11/temperley-mp99.pdf){target="_blank"}, a reconsideration of the classic Krumhansl-Schmuckler Key-Finding Algorithm.
+
+### Tempo: A... Tempogram
+
+```{r}
+prydz_tempo <-
+  readRDS(file = "data/prydz_tempo.RDS")
+
+ggplotly(prydz_tempo)
+```
+
+------------------------------------------------------------------------
+
+If the last slide didn't inspire you to pull up the track and hear the changes and follow along, maybe this one will. Not only does Eric Prydz have a very interesting melodic visualization, but when we visualize the tempo of the song using a Fourier based, cyclic tempogram, we get a pretty stunning result. We see here how the song is analyzed to start out around the 80bpm mark or below, and slowly starts ramping up. In fact, it's a build up that starts at the beginning of the song and continues until around 3 minutes and 10 seconds where it settles on its main tempo of about 126 beats per minute. The extra lines that we see above and to the left are what is called tempo harmonics --- listening to the song, we can confirm the true tempo line is the main one we see in the middle, but if we were to zoom out on this graph we would see the horizontal line repeated around 252 beats per minute, exactly double of where we see it on this graph. This is because the software is unsure whether to count the beat for its value, or double, or half, or another way. We also see the tempo fade back down starting at around 400 seconds. There is a bit of a breakdown at 330 seconds, or 5 minutes and 30 seconds, which is audible but in my opinion is very unnoticeable compared to how pronounced the drop is on the tempogram.
 
 # Headliner Clustering {data-orientation="columns"}
 
 ## Column {data-width="200"}
 
-### Commentary
+### **Commentary**
 
 Coachella has had a wide array of headliners over the past six years, ranging over diverse genres such as KPOP, rap, psychedelic rock, classic rock, R&B, and more. While each of these headliners earned their spot by being a legend and paving their own way, we can still do some grouping amongst them. The dendrogram to the right is a visualization of a clustering technique applied to [a playlist I created](https://open.spotify.com/playlist/7uPCMiwKhG0SSHO9Ivx5FL?si=a7a9311545894655){target="_blank"}, with the artist names on the right and their #1 song, which was used for clustering, on the left. Of course, this isn't the best method, since perhaps the artist's #1 song is not very representative of their style, but it should be good enough to get some general groupings.
 
-The clustering was calculated based on pitch and timbre features of the tracks, and the dendrogram was created using complete linkage. Looking on the lowest level, we can perhaps start to make out some subgenres and make sense of the clusters.
+The clustering was calculated based on based on pitches, timbre, danceability, energy, loudness, speechiness, acousticness, instrumentalness, liveness, valence, tempo, duration and key features of the tracks, and the dendrogram was created using complete linkage. Looking on the lowest level, we can perhaps start to make out some subgenres and make sense of the clusters.
 
 • ***The Less I Know The Better*** and ***Sweet Child O' Mine*** were grouped together, but interestingly enough (both being rock songs) they were separated pretty distinctly from ***Creep*** by Radiohead. ***Sweet Child O' Mine*** is classic rock at its finest, and ***TLIKTB*** by Tame Impala is in a similar world, in psychedelic rock, so this grouping makes sense.
 
@@ -410,7 +423,7 @@ The clustering was calculated based on pitch and timbre features of the tracks, 
 
 ## Column {data-width="800"}
 
-### Dendrogram
+### **Dendrogram**
 
 ```{r}
 headliners_dendro <- readRDS(file = "data/headliners_dendro.RDS")
@@ -418,6 +431,52 @@ headliners_dendro <- readRDS(file = "data/headliners_dendro.RDS")
 ggplotly(headliners_dendro)
 ```
 
-# Discussion
+# Discussion {data-orientation="columns"}
 
-Through exploring different areas, from very broad to very specific, of Coachella lineups over the past decade, we have explored how different
+## Column {data-width="800"}
+
+### **Commentary**
+
+Through exploring very broad to very specific aspects of Coachella lineups over the past decade, we have explored how different genres, styles, artists, and songs make up the festival as we know it.
+
+In the overview section, we were able to make broad generalizations and analyses about the 2023 lineup compared to the 2022, on basis of loudness, danceability, energy, and mode.
+
+Then we dove deeper into danceability with a section where we analyzed the average tempo and danceability of each Coachella lineup from 2016-2023, finding that, on average, danceability is increasing which aligns with a steady rise in EDM at the festival.
+
+With Beyonce, we analyzed one of the most iconic performances through the use of a chromagram which visualized her melodic powers in both her live and studio recordings of the song "Formation", and showed through a dynamic time warping how these versions were similar and different in their chroma features.
+
+Then, to show range of headliners, we compared and contrasts musical structure through cepstrograms and chroma and timbre analysis between pop band BTS and neo soul artist Frank Ocean. Here we saw how a typical radio pop song shows a very structured self-similarity matrix, while a song with more musicality and instrumentation will have less of a stark pattern.
+
+On the topic of genre, we moved to EDM, a popular genre at the festival as discussed, to show how an EDM song can play with our notions of key and tempo. Eric Prydz's "Opus" does just that and its unique attack on those features is visualized through a chordogram and tempogram.
+
+Finally, we attempted to get some sort of grouping for the diverse madness that is the lineup by using a clustering algorithm based on pitches, timbre, danceability, energy, loudness, speechiness, acousticness, instrumentalness, liveness, valence, tempo, duration and key and saw how some of the headliners could be grouped together.
+
+The festival, at the end of the day, can't be classified as one thing. The number of artists alone guarantees a baseline of diversity, but, as we've shown, the diversity is certainly not at a minimum. There are artists with pure EDM playing stages away from radio pop. R&B and experimental slow music competes with modern hip-hop and rap.
+
+To Coachella organizers at Goldenvoice, analysis like this could be important in deciding the future of their festival. It's important to quantify and reflect on these types of things when faced with criticism as shown in the introduction. That being said, I think they're doing an okay job.
+
+## Column {data-width="200"}
+
+### **References**
+
+• All of the data collected for this project was collected from Spotify using the official Spotify API.
+
+• The visualizations for this project were made with the help of Dr. John Ashley Burgoyne and his teaching staff.
+
+• The tools and libraries used in the making of this project are:
+
+-   [`compmus`](https://github.com/jaburgoyne/compmus) (by Dr. Burgoyne) for complex computational musicology functions
+
+-    [`spotifyr`](https://www.rcharlie.com/spotifyr/) for interacting with the Spotify API with R
+
+-   [`ggplot2`](https://ggplot2.tidyverse.org/) for plotting data, and making it interactive
+
+-    [`ggthemes`](https://cran.r-project.org/web/packages/ggthemes/index.html) for theming plots
+
+-   [`ggdendro`](https://cran.r-project.org/web/packages/ggdendro/index.html) , for creating and rendering the dendrogram
+
+-   [`flexdashboard`](https://pkgs.rstudio.com/flexdashboard/) , for the interactive dashboard and site setup
+
+• The playlists were made by Spotify user [Alex Rodriguez](https://open.spotify.com/user/aarod333){target="_blank"} and myself.
+
+• This project was completed at the [Universiteit van Amsterdam](https://www.uva.nl/) in Spring 2023.

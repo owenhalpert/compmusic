@@ -4,7 +4,6 @@ library(ggthemes)
 library(tidyverse)
 library(plotly)
 library(compmus)
-library(spotifyr)
 library(ggdendro)
 library(tidymodels)
 library(heatmaply)
@@ -572,6 +571,18 @@ headliners_dendrobytrack <- headliners_distbytrack |>
   labs(title = "Headliners Dendrogram with Track Name")
 
 saveRDS(object = headliners_dendrobytrack,file = "data/headliners_dendrobytrack.RDS")
+
+prydz_tempo <- get_tidy_audio_analysis("3v2oAQomhOcYCPPHafS3KV")
+
+prydz_tempo <- prydz_tempo |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)") +
+  theme_classic()
+
+saveRDS(object = prydz_tempo,file = "data/prydz_tempo.RDS")
 
 
 
