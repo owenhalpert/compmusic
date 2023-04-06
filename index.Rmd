@@ -44,7 +44,7 @@ The Spotify tracks I will use to analyze this progression will be yearly lineup 
 
 Shortcomings with this methodology might be that the selected tracks for each artist may not be representative of their true genre, that the playlists may not always be fully inclusive of all artists on the lineup, or that they are simply so large that meaningful comparisons by some metrics will be difficult to make. Nonetheless, we can use these as a starting point to focus in on some trends within instead of trying to analyze the years as a whole.
 
-To give a sense of the breadth of these playlists, we can examine the outliers. Looking at the [2023 lineup playlist](https://open.spotify.com/playlist/2HfbF1Xx4RHhJI8jNvQAQb){target="_blank"}, an extremely atypical track is BTSTU by Jai Paul. Paul was added to the lineup as an artist with a cult following who is extremely secretive and has never performed live. He is as elusive, if not more, than headliner Frank Ocean. Conversely, we see One Kiss by Calvin Harris, which we can say is much more typical, given that Harris has performed at Coachella 8 times and is one of the most mainstream EDM artists.
+To give a sense of the breadth of these playlists, we can examine the outliers. Looking at the [2023 lineup playlist](https://open.spotify.com/playlist/2HfbF1Xx4RHhJI8jNvQAQb){target="_blank"}, an extremely atypical track is [BTSTU by Jai Paul](https://open.spotify.com/track/5hqVCLyCQJA24IupqEEmvL?si=f3493454c24d4e47){target="_blank"}. Paul was added to the lineup as an artist with a cult following who is extremely secretive and has never performed live. He is as elusive, if not more, than headliner Frank Ocean. Conversely, we see [One Kiss by Calvin Harris](https://open.spotify.com/track/7ef4DlsgrMEH11cDZd32M6?si=63c775fbcf394b9f){target="_blank"}, which we can say is much more typical, given that Harris has performed at Coachella 8 times and is one of the most mainstream EDM artists.
 
 While these playlists will serve as a guide, most of the actual analysis will be done on individual tracks or segments of these playlists rather than analyzing them as a whole.
 
@@ -54,7 +54,7 @@ While these playlists will serve as a guide, most of the actual analysis will be
 
 ### **Commentary**
 
-The below charts give a high-level broad overview of major audio features for tracks in the [2022](https://open.spotify.com/playlist/2tcwxeUSNT7gYMzidaf5W1){target="_blank"} and [2023](https://open.spotify.com/playlist/2HfbF1Xx4RHhJI8jNvQAQb){target="_blank"} playlists. Specifically, captured are the valence, energy, danceability (size of dots, mouse over for values) and mode. With the size of these datasets it is difficult to make broad comparisons, but some observations could be as follows:
+The displayed graphics give a high-level broad overview of major audio features for tracks in the [2022](https://open.spotify.com/playlist/2tcwxeUSNT7gYMzidaf5W1){target="_blank"} and [2023](https://open.spotify.com/playlist/2HfbF1Xx4RHhJI8jNvQAQb){target="_blank"} playlists. Specifically, captured are the valence, energy, danceability (size of dots, mouse over for values) and mode. With the size of these datasets it is difficult to make broad comparisons, but some observations could be as follows:
 
 • While 2022 shows most of the high valence songs having a major key, 2023 is more of a mix, with some of the highest valence songs being in a minor key.
 
@@ -108,7 +108,7 @@ ggplotly(plot2)
 
 ### **Commentary** {data-width="200"}
 
-Over the past seven years, with the rise of EDM in pop culture and in Coachella's lineups, one may ask if the festival is becoming more dancey. What we see below is the average tempi and danceability scores (a Spotify quantification) from each year. This is no easy task computationally speaking, in fact, the graph below involves over 6,000 data points, around 1000 songs curated from each year's lineup by [Alex Rodriguez](https://open.spotify.com/user/aarod333?si=271917dd12624d62){target="_blank"}.
+Over the past seven years, with the rise of EDM in pop culture and in Coachella's lineups, one may ask if the festival is becoming more dancey. What we see is the average tempi and danceability scores (a Spotify quantification) from each year. This is no easy task computationally speaking, in fact, the given graph encompasses over 6,000 data points, around 1000 songs curated from each year's lineup by [Alex Rodriguez](https://open.spotify.com/user/aarod333?si=271917dd12624d62){target="_blank"}.
 
 We can see the average tempo mostly decreasing, and the average danceability mostly increasing. This is interesting, because normally you would assume these metrics go hand in hand. In reality, Spotify doesn't explicitly give their calculation methodology for Danceability. They simply say,
 
@@ -467,11 +467,11 @@ To Coachella organizers at Goldenvoice, analysis like this could be important in
 
 -   [`compmus`](https://github.com/jaburgoyne/compmus) (by Dr. Burgoyne) for complex computational musicology functions
 
--    [`spotifyr`](https://www.rcharlie.com/spotifyr/) for interacting with the Spotify API with R
+-   [`spotifyr`](https://www.rcharlie.com/spotifyr/) for interacting with the Spotify API with R
 
 -   [`ggplot2`](https://ggplot2.tidyverse.org/) for plotting data, and making it interactive
 
--    [`ggthemes`](https://cran.r-project.org/web/packages/ggthemes/index.html) for theming plots
+-   [`ggthemes`](https://cran.r-project.org/web/packages/ggthemes/index.html) for theming plots
 
 -   [`ggdendro`](https://cran.r-project.org/web/packages/ggdendro/index.html) , for creating and rendering the dendrogram
 
