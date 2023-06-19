@@ -4,6 +4,7 @@
 
 [owenhalpert.com/compmusic
 ](owenhalpert.com/compmusic)
+
 I grew up with Coachella --- as a child I was surrounded by its influence in the Los Angeles region, in high school I was lucky enough to attend all four years, and in college I road tripped with my fellow students for the 2022 lineup.
 
 I owe a lot of my passion for music and my broad taste in genres to attending Coachella. With an extremely diverse lineup, attendees can walk from one stage to the next and instantly be transported between wildly different musical experiences.
